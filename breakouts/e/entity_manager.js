@@ -1,4 +1,4 @@
-C = {
+var EntityManager = {
 
   _sequence_id: 0,
 
@@ -27,7 +27,7 @@ C = {
 
     Object.keys(new_components)
       .forEach(function(name){
-        C._replaceComponent(components, id, new_components[name], name)
+        EntityManager._replaceComponent(components, id, new_components[name], name)
       })
     return id;
   },
@@ -51,7 +51,7 @@ C = {
   //Build an object of every component associated with an entity id.
   _entity: function(components, target, entity){
 
-    C._entity_each(components, function(component, name){
+    EntityManager._entity_each(components, function(component, name){
       target[name] = component
     }, entity)
 
@@ -59,70 +59,41 @@ C = {
   },
 
   category: function(category){
-    return C._components[category]
+    return EntityManager._components[category]
   },
 
   component: function(entity, category){
-    return C._components[category] && C._components[category][entity]
+    return EntityManager._components[category] && EntityManager._components[category][entity]
   },
 
   add: function(id, new_components){
-    return C._create(C._components, id, new_components)
+    return EntityManager._create(EntityManager._components, id, new_components)
   },
 
   addComponent: function(name, component, entity){
-    return C._replaceComponent(C._components, entity, component, name);
+    return EntityManager._replaceComponent(EntityManager._components, entity, component, name);
   },
 
   create: function(new_components){
-    return C._create(C._components, ++C._sequence_id, new_components)
+    return EntityManager._create(EntityManager._components, ++EntityManager._sequence_id, new_components)
   },
 
   remove: function(id, name){
     var array = []
     var names = arguments.length == 2 ?
       array.concat(name) : array.slice.call(arguments)
-    return C._removeMultiple(C._components, id, names)
+    return EntityManager._removeMultiple(EntityManager._components, id, names)
   },
 
   removeEntity: function(id){
-    return C._entity_each(C._components, function(component, name){
-      delete C._components[name]
+    return EntityManager._entity_each(EntityManager._components, function(component, name){
+      delete EntityManager._components[name]
     })
   },
 
   entity: function(entity){
-    return C._entity(C._components, {}, entity)
+    return EntityManager._entity(EntityManager._components, {}, entity)
   }
 }
 
-
-//Usage:
-//
-// C.create({
-//   Position: { x:0, y:0},
-//   Velocity: { x:0, y:0}
-// })
-
-// C.create({
-//   Position: { x:0, y:0},
-//   Velocity: { x:0, y:0}
-// })
-
-// C.category("Position")
-
-// C.entity(1)
-
-// C.add(1, {
-//   Acceleration: { x:0, y:0 },
-//   Position: { x: 0, y:0 },
-//   Health: { value: 4 },
-//   Ammo: { value: 5 }
-// })
-
-// C.addComponent("Damage", { value: 4 }, 1)
-
-
-// C.component(1, "Damage")
-
-// ["Damage", "Position", "Velocity"].map(C.component.bind(null,1))
+module.exports = EntityManager
