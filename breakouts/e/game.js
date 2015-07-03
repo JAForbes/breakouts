@@ -41,6 +41,7 @@ Promise.all([
 ]).then(function(loaded) {
 	game.assets.images = loaded[0]
 	game.assets.sounds = loaded[1]
+	_.sample(game.assets.sounds).play()
 }).then(function(){
 	game.active.state = "intro"
 })
