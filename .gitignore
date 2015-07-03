@@ -8,4 +8,4 @@ js/xstyle/
 js/grid.js.*
 .DS_Store
 *swp
-
+*node_modules*
